@@ -24,23 +24,23 @@ export default function Home() {
     } 
   }, []);
 
+  if (!user) {
+    return <p>Loading user data...</p>; // This is the loading state
+  }
+
   return (
     <div>
       <h1>Telegram Mini App</h1>
-      {user ? (
-        <div>
-                    <p>
-            Username: {user.username ? `@${user.username}` : "No username"}
-          </p>
-          {user.photo_url ? (
-            <img src={user.photo_url} alt={`${user.first_name}'s photo`} width={50} height={50} />
-          ) : (
-            <p>No profile photo available</p>
-          )}
-        </div>
-      ) : (
-        <p>Loading user data...</p>
-      )}
+      <div>
+        <p>
+          Username: {user.username ? `@${user.username}` : "No username"}
+        </p>
+        {user.photo_url ? (
+          <img src={user.photo_url} alt={`${user.first_name}'s photo`} width={50} height={50} />
+        ) : (
+          <p>No profile photo available</p>
+        )}
+      </div>
     </div>
   );
 }
