@@ -10,20 +10,23 @@ interface TelegramUser {
   photo_url?: string;
 }
 
-
 export default function Home() {
   const [user, setUser] = useState<TelegramUser | null>(null);
 
   useEffect(() => {
-    // Dynamically adding the Telegram widget script
     const script = document.createElement("script");
     script.src = "https://telegram.org/js/telegram-widget.js?15";
-    script.setAttribute("data-telegram-login", "skill_Link_bot"); // Replace with your bot's username
+    script.setAttribute("data-telegram-login", "skill_Link_bot");
     script.setAttribute("data-size", "large");
     script.setAttribute("data-auth-url", "/api/verifyTelegram");
     script.setAttribute("data-request-access", "write");
     script.async = true;
-    document.getElementById("telegram-login")?.appendChild(script);
+
+    const telegramLoginDiv = document.getElementById("telegram-login");
+    if (telegramLoginDiv) {
+      telegramLoginDiv.innerHTML = ""; // Clear previous content if any
+      telegramLoginDiv.appendChild(script); // Append the widget script
+    }
   }, []);
 
   useEffect(() => {
@@ -31,7 +34,7 @@ export default function Home() {
       const telegram = window.Telegram.WebApp;
       const userData: TelegramUser | undefined = telegram.initDataUnsafe?.user;
       if (userData) {
-        setUser(userData); // Set the user state with the fetched data
+        setUser(userData);
       }
       telegram.ready(); // Notify Telegram that the app is ready
     }
