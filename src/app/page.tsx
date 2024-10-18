@@ -16,12 +16,20 @@ export default function Home() {
   useEffect(() => {
     if (typeof window !== "undefined" && window.Telegram?.WebApp) {
       const telegram = window.Telegram.WebApp;
+
+      // Log all initDataUnsafe properties to debug
+      console.log("initDataUnsafe:", telegram.initDataUnsafe);
+
+      // Try to access user data from initDataUnsafe
       const userData: TelegramUser | undefined = telegram.initDataUnsafe?.user;
       if (userData) {
         setUser(userData); // Set the user state with the fetched data
       }
+
       telegram.ready(); // Notify Telegram that the app is ready
-    } 
+    } else {
+      console.error("Telegram WebApp API is not available.");
+    }
   }, []);
 
   if (!user) {
@@ -36,7 +44,7 @@ export default function Home() {
           Username: {user.username ? `@${user.username}` : "No username"}
         </p>
         {user.photo_url ? (
-          <img src={user.photo_url} alt={`${user.first_name}'s photo`} width={50} height={50} />
+          <img src={user.photo_url} alt={`${user.first_name}`} width={50} height={50} />
         ) : (
           <p>No profile photo available</p>
         )}
