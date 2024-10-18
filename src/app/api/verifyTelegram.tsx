@@ -15,7 +15,7 @@ async function verifyTelegramData(initData: string | undefined) {
   const data = Buffer.from(initData.substring(16), 'hex');
 
   const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
-  let decoded = Buffer.concat([decipher.update(data), decipher.final()]);
+  const decoded = Buffer.concat([decipher.update(data), decipher.final()]);
   
   return decoded.toString();
 }
@@ -37,8 +37,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       // Respond with user info or save it to a session/database
       res.status(200).json(user);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to verify user" });
+    } catch (err) {
+      // Log the error for debugging purposes and send it in the response
+      console.error("Verification error:", err);
+      res.status(500).json({ error: "Failed to verify user", message: err instanceof Error ? err.message : "Unknown error" });
     }
   } else {
     res.status(405).json({ error: "Method Not Allowed" });
