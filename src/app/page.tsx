@@ -37,13 +37,22 @@ export default function Home() {
         setUser(userData);
       }
       telegram.ready(); // Notify Telegram that the app is ready
+    } else {
+      setUser({
+        id: 1011196309, // Example user ID
+        first_name: "John", // Example first name
+        last_name: "Doe", // Example last name
+        username: "john_doe", // Example username
+        photo_url: "https://example.com/photo.jpg", // Example photo URL
+      });
     }
   }, []);
 
   return (
     <div>
       <h1>Telegram Mini App</h1>
-      <div id="telegram-login"></div> {/* This is where the Telegram login widget will be rendered */}
+      <div id="telegram-login"></div>{" "}
+      {/* This is where the Telegram login widget will be rendered */}
       {user ? (
         <div>
           <p>
@@ -51,7 +60,12 @@ export default function Home() {
           </p>
           <p>Your Telegram ID is {user.id}</p>
           {user.photo_url ? (
-            <img src={user.photo_url} alt="User profile" width="100" height="100" />
+            <img
+              src={user.photo_url}
+              alt="User profile"
+              width="100"
+              height="100"
+            />
           ) : (
             <p>No profile photo available</p>
           )}
