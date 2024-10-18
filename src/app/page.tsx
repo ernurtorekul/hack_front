@@ -18,7 +18,7 @@ export default function Home() {
     // Dynamically adding the Telegram widget script
     const script = document.createElement("script");
     script.src = "https://telegram.org/js/telegram-widget.js?15";
-    script.setAttribute("data-telegram-login", "userCech_bot"); // Replace with your bot's username
+    script.setAttribute("data-telegram-login", "skill_Link_bot"); // Replace with your bot's username
     script.setAttribute("data-size", "large");
     script.setAttribute("data-auth-url", "/api/verifyTelegram");
     script.setAttribute("data-request-access", "write");
