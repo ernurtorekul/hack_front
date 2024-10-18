@@ -38,12 +38,11 @@ export default function Home() {
       <h1>Telegram Mini App</h1>
       {user ? (
         <div>
-          <p>
-            Hello, {user.first_name} {user.last_name || ""}!
+                    <p>
+            Username: {user.username ? `@${user.username}` : "No username"}
           </p>
-          <p>Your Telegram ID is {user.id}</p>
           {user.photo_url ? (
-            <img src={user.photo_url} alt="User profile" width="100" height="100" />
+            <img src={user.photo_url} alt={`${user.first_name}'s photo`} width={50} height={50} />
           ) : (
             <p>No profile photo available</p>
           )}
