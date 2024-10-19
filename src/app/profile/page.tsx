@@ -95,7 +95,7 @@ function Profile() {
 
   return (
     <div>
-      <div className={` p-4 space-y-6 ${!isHR ? "hidden" : ""}`}>
+      <div className={`p-4 space-y-6 ${!isHR ? "hidden" : ""}`}>
         <div className="flex space-x-4">
           <div className="w-32 h-32 rounded-lg overflow-hidden bg-gray-200">
             {photo ? (
@@ -268,7 +268,7 @@ function Profile() {
                     />
                   </div>
                   <div className="gap-2 border border-gray-300 p-2 rounded">
-                    <Label>Experience</Label>
+                    <Label><BriefcaseBusiness/> Experience</Label>
                     <input
                       type="text"
                       name="experience"
@@ -279,8 +279,8 @@ function Profile() {
                   </div>
                   <Button className="w-full">Apply</Button>
                 </SheetDescription>
-              </SheetHeader>
-            </SheetContent>
+              </SheetHeader> 
+              </SheetContent>
           </Sheet>
         </div>
       </div>
@@ -385,7 +385,7 @@ function Profile() {
                           />
                         </div>
                         <div className="gap-2 border border-gray-300 p-2 rounded">
-                          <Label>Experience</Label>
+                          <Label><BriefcaseBusiness/> Experience</Label>
                           <input
                             type="text"
                             name="experience"
