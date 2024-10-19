@@ -1,31 +1,52 @@
 "use client"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation" // Use useRouter from next/navigation
+import Navbar from "../components/Navbar"
+import HrNavbar from "@/app/hr/components/HrNavbar"
+import Switcher from "@/components/custom/switcher"
 import "./globals.css"
-import { useEffect } from "react"
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  useEffect(() => {
-    if (typeof window !== "undefined" && !document.getElementById("telegram-web-app-script")) {
-      const script = document.createElement("script")
-      script.src = "https://telegram.org/js/telegram-web-app.js"
-      script.id = "telegram-web-app-script"
-      document.head.appendChild(script)
+  const [userRole, setUserRole] = useState<string | null>(null)
+  const router = useRouter() // Use Next.js 13 router for navigation
 
-      script.onload = () => {
-        console.log("Telegram WebApp script loaded successfully.")
-      }
+  useEffect(() => {
+    const savedRole = localStorage.getItem("userRole")
+    if (savedRole) {
+      setUserRole(savedRole)
     }
   }, [])
+
+  const handleRoleSelection = (role: string) => {
+    setUserRole(role)
+    localStorage.setItem("userRole", role)
+
+    // Use client-side navigation to avoid page reload
+    if (role === "employer") {
+      router.push("/hr/home") // Navigate to HR dashboard
+    } else {
+      router.push("/home") // Navigate to employee pages
+    }
+  }
 
   return (
     <html lang='en'>
       <head>
         <script src='https://telegram.org/js/telegram-web-app.js' async></script>
       </head>
-      <body>{children}</body>
+      <body>
+        <div>
+          <Switcher onSelectRole={handleRoleSelection} />
+          {children}
+        </div>
+
+        {/* Conditionally render the appropriate navbar based on the user role */}
+        {userRole === "employer" ? <HrNavbar /> : <Navbar />}
+      </body>
     </html>
   )
 }
