@@ -1,7 +1,7 @@
-"use client"
-import React, { useEffect, useState } from "react"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
+"use client";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
@@ -9,82 +9,295 @@ import {
   CardContent,
   CardFooter,
   //   CardDescription,
-} from "@/components/ui/card"
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog"
-import { Label } from "@radix-ui/react-label"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+} from "@/components/ui/card";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import { Label } from "@radix-ui/react-label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
+import { BriefcaseBusiness } from "lucide-react";
 
 const initialProfile = {
   name_surname: "Ernur",
   profession: "Management",
+  company_name: "ABC Corp",
+  description:
+    "lorem1024ds ad sads ad sad sa da dsad s dsad sads ad asdsa das d",
   gender: "Male",
   date_of_birth: "12.12.2000",
   skills: "Organization, Problem Solving, Multitask",
   experience: "3 years",
   email: "email@.com",
   phone_number: "+7 777 777 77 77",
-}
+  position_name: "account manager",
+  salary: "50000",
+  address: "123 Main St, City, State, Country",
+  skills_required: "React, JavaScript, Node.js",
+};
 
 function Profile() {
-  const [profile, setProfile] = useState(initialProfile)
-  const [photo, setPhoto] = useState<string | null>(null)
-  const [resume, setResume] = useState<File | null>(null)
+  const [profile, setProfile] = useState(initialProfile);
+  const [photo, setPhoto] = useState<string | null>(null);
+  const [resume, setResume] = useState<File | null>(null);
 
-  const [isHR, setIsHR] = useState(false)
+  const [isHR, setIsHR] = useState(false);
 
   useEffect(() => {
-    const role = localStorage.getItem("userRole")
+    const role = localStorage.getItem("userRole");
     if (role === "employer") {
-      setIsHR(role === "employer")
+      setIsHR(role === "employer");
     } else {
-      setIsHR(false)
+      setIsHR(false);
     }
-  }, [])
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setProfile({ ...profile, [name]: value })
-  }
+    const { name, value } = e.target;
+    setProfile({ ...profile, [name]: value });
+  };
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const selectedPhoto = URL.createObjectURL(e.target.files[0])
-      setPhoto(selectedPhoto)
+      const selectedPhoto = URL.createObjectURL(e.target.files[0]);
+      setPhoto(selectedPhoto);
     }
-  }
+  };
 
   const handleResumeUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setResume(e.target.files[0])
+      setResume(e.target.files[0]);
     }
-  }
+  };
 
   const handleSave = () => {
-    console.log("Profile updated:", profile)
-    alert("Profile saved successfully!")
-  }
+    console.log("Profile updated:", profile);
+    alert("Profile saved successfully!");
+  };
 
   const handleRoleChange = (e: string) => {
-    setIsHR(e === "employer")
-    console.log("Role changed to:", e)
-    localStorage.setItem("userRole", e) // Save the role to localStorage
-  }
+    setIsHR(e === "employer");
+    console.log("Role changed to:", e);
+    localStorage.setItem("userRole", e); // Save the role to localStorage
+  };
 
   return (
     <div>
-      <div className={`${!isHR ? "hidden" : ""}`}>HR</div>
-      <div className={`p-4 space-y-6 ${isHR ? "hidden" : ""}`}>
-        <div className='flex space-x-4'>
-          <div className='w-32 h-32 rounded-lg overflow-hidden bg-gray-200'>
+      <div className={` p-4 space-y-6 ${!isHR ? "hidden" : ""}`}>
+        <div className="flex space-x-4">
+          <div className="w-32 h-32 rounded-lg overflow-hidden bg-gray-200">
             {photo ? (
-              <Image src={photo} alt='Profile' width={128} height={128} />
+              <Image src={photo} alt="Profile" width={128} height={128} />
             ) : (
-              <div className='flex items-center justify-center h-full text-gray-500'>No photo</div>
+              <div className="flex items-center justify-center h-full text-gray-500">
+                No photo
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <div className="text-xl font-bold">{profile.company_name}</div>
+            <div className="text-xl ">{profile.name_surname}</div>
+            <div>{profile.description}</div>
+            {/* <div>{profile.gender}</div> */}
+            {/* <div>{profile.date_of_birth}</div> */}
+            <div>{profile.skills}</div>
+            {/* <div>{profile.experience}</div> */}
+          </div>
+
+          <div>
+            <Dialog>
+              <DialogTrigger>
+                <Button>Edit</Button>
+              </DialogTrigger>
+
+              <DialogContent className="max-h-[90vh] overflow-y-auto">
+                <Card className="w-full ">
+                  <CardHeader className="gap-2">
+                    <CardTitle>Edit Profile</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <form className="space-y-4">
+                      <div>
+                        <Label>Profile Photo</Label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handlePhotoUpload}
+                        />
+                      </div>
+
+                      <div className="grid gap-4">
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
+                          <Label>Company name</Label>
+                          <input
+                            type="text"
+                            name="company_name"
+                            value={profile.company_name}
+                            onChange={handleInputChange}
+                            className="input w-full border p-1 rounded"
+                          />
+                        </div>
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
+                          <Label>name username</Label>
+                          <input
+                            type="text"
+                            name="company_name"
+                            value={profile.name_surname}
+                            onChange={handleInputChange}
+                            className="input w-full border p-1 rounded"
+                          />
+                        </div>
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
+                          <Label>description</Label>
+                          <input
+                            type="text"
+                            name="company_name"
+                            value={profile.description}
+                            onChange={handleInputChange}
+                            className="input w-full border p-1 rounded"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid gap-4">
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
+                          <Label>Skills</Label>
+                          <input
+                            type="text"
+                            name="skills"
+                            value={profile.skills}
+                            onChange={handleInputChange}
+                            className="input w-full border p-1 rounded"
+                          />
+                        </div>
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
+                          <Label>email</Label>
+                          <input
+                            type="text"
+                            name="experience"
+                            value={profile.email}
+                            onChange={handleInputChange}
+                            className="input w-full border p-1 rounded"
+                          />
+                        </div>
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
+                          <Label>phone number</Label>
+                          <input
+                            type="text"
+                            name="experience"
+                            value={profile.phone_number}
+                            onChange={handleInputChange}
+                            className="input w-full border p-1 rounded"
+                          />
+                        </div>
+                      </div>
+                    </form>
+                  </CardContent>
+                  <CardFooter className="flex justify-center items-center">
+                    <Button className="w-full" onClick={handleSave}>
+                      Save
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+        <div>
+          <Sheet>
+            <SheetTrigger asChild className="m-2">
+              <Button>Add vacancy</Button>
+            </SheetTrigger>
+
+            <SheetContent className="h-4/5 overflow-y-auto">
+              <SheetHeader>
+                <SheetTitle>
+                  <div className="gap-2 border border-gray-300 p-2 rounded">
+                    <Label>Company name</Label>
+                    <input
+                      type="text"
+                      name="experience"
+                      value={initialProfile.position_name}
+                      onChange={handleInputChange}
+                      className="input w-full border p-1 rounded"
+                    />
+                  </div>
+                </SheetTitle>
+                <SheetDescription className="space-y-4">
+                  <div className="gap-2 border border-gray-300 p-2 rounded">
+                    <Label>Salary</Label>
+                    <input
+                      type="text"
+                      name="experience"
+                      value={initialProfile.salary}
+                      onChange={handleInputChange}
+                      className="input w-full border p-1 rounded"
+                    />
+                  </div>
+                  <div className="gap-2 border border-gray-300 p-2 rounded">
+                    <Label>Skills required</Label>
+                    <input
+                      type="text"
+                      name="experience"
+                      value={initialProfile.skills_required}
+                      onChange={handleInputChange}
+                      className="input w-full border p-1 rounded"
+                    />
+                  </div>
+                  <div className="gap-2 border border-gray-300 p-2 rounded">
+                    <Label>Address</Label>
+                    <input
+                      type="text"
+                      name="experience"
+                      value={initialProfile.address}
+                      onChange={handleInputChange}
+                      className="input w-full border p-1 rounded"
+                    />
+                  </div>
+                  <div className="gap-2 border border-gray-300 p-2 rounded">
+                    <Label>Experience</Label>
+                    <input
+                      type="text"
+                      name="experience"
+                      value={initialProfile.experience}
+                      onChange={handleInputChange}
+                      className="input w-full border p-1 rounded"
+                    />
+                  </div>
+                  <Button className="w-full">Apply</Button>
+                </SheetDescription>
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+      <div className={`p-4 space-y-6 ${isHR ? "hidden" : ""}`}>
+        <div className="flex space-x-4">
+          <div className="w-32 h-32 rounded-lg overflow-hidden bg-gray-200">
+            {photo ? (
+              <Image src={photo} alt="Profile" width={128} height={128} />
+            ) : (
+              <div className="flex items-center justify-center h-full text-gray-500">
+                No photo
+              </div>
             )}
           </div>
 
           <div>
-            <div className='text-xl font-bold'>{profile.name_surname}</div>
+            <div className="text-xl font-bold">{profile.name_surname}</div>
             <div>{profile.profession}</div>
             <div>{profile.gender}</div>
             <div>{profile.date_of_birth}</div>
@@ -98,121 +311,125 @@ function Profile() {
                 <Button>Edit</Button>
               </DialogTrigger>
 
-              <DialogContent className='max-h-[90vh] overflow-y-auto'>
-                <Card className='w-full '>
-                  <CardHeader className='gap-2'>
+              <DialogContent className="max-h-[90vh] overflow-y-auto">
+                <Card className="w-full ">
+                  <CardHeader className="gap-2">
                     <CardTitle>Edit Profile</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <form className='space-y-4'>
+                    <form className="space-y-4">
                       <div>
                         <Label>Profile Photo</Label>
-                        <input type='file' accept='image/*' onChange={handlePhotoUpload} />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handlePhotoUpload}
+                        />
                       </div>
 
-                      <div className='grid gap-4'>
-                        <div className='gap-2 border border-gray-300 p-2 rounded'>
+                      <div className="grid gap-4">
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
                           <Label>Name</Label>
                           <input
-                            type='text'
-                            name='name_surname'
+                            type="text"
+                            name="name_surname"
                             value={profile.name_surname}
                             onChange={handleInputChange}
-                            className='input w-full border p-1 rounded'
+                            className="input w-full border p-1 rounded"
                           />
                         </div>
-                        <div className='gap-2 border border-gray-300 p-2 rounded'>
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
                           <Label>Profession</Label>
                           <input
-                            type='text'
-                            name='profession'
+                            type="text"
+                            name="profession"
                             value={profile.profession}
                             onChange={handleInputChange}
-                            className='input w-full border p-1 rounded'
+                            className="input w-full border p-1 rounded"
                           />
                         </div>
                       </div>
 
-                      <div className='grid gap-4'>
-                        <div className='gap-2 border border-gray-300 p-2 rounded'>
+                      <div className="grid gap-4">
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
                           <Label>Gender</Label>
                           <input
-                            type='text'
-                            name='gender'
+                            type="text"
+                            name="gender"
                             value={profile.gender}
                             onChange={handleInputChange}
-                            className='input w-full border p-1 rounded'
+                            className="input w-full border p-1 rounded"
                           />
                         </div>
-                        <div className='gap-2 border border-gray-300 p-2 rounded'>
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
                           <Label>Date of Birth</Label>
                           <input
-                            type='text'
-                            name='date_of_birth'
+                            type="text"
+                            name="date_of_birth"
                             value={profile.date_of_birth}
                             onChange={handleInputChange}
-                            className='input w-full border p-1 rounded'
+                            className="input w-full border p-1 rounded"
                           />
                         </div>
                       </div>
 
-                      <div className='grid gap-4'>
-                        <div className='gap-2 border border-gray-300 p-2 rounded'>
+                      <div className="grid gap-4">
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
                           <Label>Skills</Label>
                           <input
-                            type='text'
-                            name='skills'
+                            type="text"
+                            name="skills"
                             value={profile.skills}
                             onChange={handleInputChange}
-                            className='input w-full border p-1 rounded'
+                            className="input w-full border p-1 rounded"
                           />
                         </div>
-                        <div className='gap-2 border border-gray-300 p-2 rounded'>
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
                           <Label>Experience</Label>
                           <input
-                            type='text'
-                            name='experience'
+                            type="text"
+                            name="experience"
                             value={profile.experience}
                             onChange={handleInputChange}
-                            className='input w-full border p-1 rounded'
+                            className="input w-full border p-1 rounded"
                           />
                         </div>
-                        <div className='gap-2 border border-gray-300 p-2 rounded'>
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
                           <Label>email</Label>
                           <input
-                            type='text'
-                            name='experience'
+                            type="text"
+                            name="experience"
                             value={profile.email}
                             onChange={handleInputChange}
-                            className='input w-full border p-1 rounded'
+                            className="input w-full border p-1 rounded"
                           />
                         </div>
-                        <div className='gap-2 border border-gray-300 p-2 rounded'>
+                        <div className="gap-2 border border-gray-300 p-2 rounded">
                           <Label>phone number</Label>
                           <input
-                            type='text'
-                            name='experience'
+                            type="text"
+                            name="experience"
                             value={profile.phone_number}
                             onChange={handleInputChange}
-                            className='input w-full border p-1 rounded'
+                            className="input w-full border p-1 rounded"
                           />
                         </div>
                       </div>
 
-                      <div className='gap-2 border border-gray-300 p-2 rounded'>
+                      <div className="gap-2 border border-gray-300 p-2 rounded">
                         <Label>Resume</Label>
                         <input
-                          type='file'
-                          accept='.pdf,.docx'
+                          type="file"
+                          accept=".pdf,.docx"
                           onChange={handleResumeUpload}
-                          className='w-full border p-1 rounded'
+                          className="w-full border p-1 rounded"
                         />
                         {resume && <p>{resume.name}</p>}
                       </div>
                     </form>
                   </CardContent>
-                  <CardFooter className='flex justify-center items-center'>
-                    <Button className='w-full' onClick={handleSave}>
+                  <CardFooter className="flex justify-center items-center">
+                    <Button className="w-full" onClick={handleSave}>
                       Save
                     </Button>
                   </CardFooter>
@@ -223,16 +440,19 @@ function Profile() {
         </div>
       </div>
       <div>
-        <Select value={isHR ? "employer" : "employee"} onValueChange={handleRoleChange}>
-          <SelectTrigger className='w-full'>
-            <SelectValue placeholder='Are you an employee or employer?' />
+        <Select
+          value={isHR ? "employer" : "employee"}
+          onValueChange={handleRoleChange}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Are you an employee or employer?" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value='employee'>
+              <SelectItem value="employee">
                 <div>Employee</div>
               </SelectItem>{" "}
-              <SelectItem value='employer'>
+              <SelectItem value="employer">
                 <div>Employer</div>
               </SelectItem>
             </SelectGroup>
@@ -240,7 +460,7 @@ function Profile() {
         </Select>
       </div>
     </div>
-  )
+  );
 }
 
-export default Profile
+export default Profile;
