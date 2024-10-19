@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/a5d75543-0a12-4e9d-ba67-13eda1f3e451)# Skill Link
+# Skill Link
 
 ## FrontEnd: NextJS
 
