@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import {
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card"
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog"
 import { Label } from "@radix-ui/react-label"
-import Switcher from "@/components/custom/switcher"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const initialProfile = {
   name_surname: "Ernur",
@@ -32,17 +32,14 @@ function Profile() {
 
   const [isHR, setIsHR] = useState(false)
 
-  const handleRoleSelection = (role: string) => {
-    // Save role in localStorage
-    localStorage.setItem("userRole", role)
-
-    // Optionally trigger redirect based on role
+  useEffect(() => {
+    const role = localStorage.getItem("userRole")
     if (role === "employer") {
-      setIsHR(true) // Redirect to HR section
+      setIsHR(role === "employer")
     } else {
-      setIsHR(false) // Redirect to employee or default section
+      setIsHR(false)
     }
-  }
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -65,6 +62,12 @@ function Profile() {
   const handleSave = () => {
     console.log("Profile updated:", profile)
     alert("Profile saved successfully!")
+  }
+
+  const handleRoleChange = (e: string) => {
+    setIsHR(e === "employer")
+    console.log("Role changed to:", e)
+    localStorage.setItem("userRole", e) // Save the role to localStorage
   }
 
   return (
@@ -218,9 +221,23 @@ function Profile() {
             </Dialog>
           </div>
         </div>
-        <div>
-          <Switcher onSelectRole={handleRoleSelection} />
-        </div>
+      </div>
+      <div>
+        <Select value={isHR ? "employer" : "employee"} onValueChange={handleRoleChange}>
+          <SelectTrigger className='w-full'>
+            <SelectValue placeholder='Are you an employee or employer?' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value='employee'>
+                <div>Employee</div>
+              </SelectItem>{" "}
+              <SelectItem value='employer'>
+                <div>Employer</div>
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
     </div>
   )
