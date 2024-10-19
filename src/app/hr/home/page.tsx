@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Search from "@/components/custom/search";
-import { SheetDemo } from "@/components/custom/sheet";
+import { SheetDemo } from "@/app/hr/components/custom/sheet";
 
 function Home() {
   return (
@@ -13,7 +13,7 @@ function Home() {
         {/* <div className="flex flex-col justify-center items-center">
         <Cards/>
         </div> */}
-        <h1 className="ml-2 text-xl font-bold">Vacancies for u</h1>
+        <h1 className="ml-2 text-xl font-bold">Candidates for u</h1>
         <div className="flex flex-col justify-center items-center">
           <SheetDemo />
           <SheetDemo />
